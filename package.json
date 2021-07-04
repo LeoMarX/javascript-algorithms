@@ -1,0 +1,21 @@
+{
+  "name": "javascript-algorithms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc src/*.ts --outDir ._dist_",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "leo",
+  "license": "ISC",
+  "dependencies": {
+    "javascript-algorithms-and-data-structures": "https://github.com/trekhleb/javascript-algorithms.git"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.28.1",
+    "@typescript-eslint/parser": "^4.28.1",
+    "eslint": "^7.30.0",
+    "typescript": "^4.3.5"
+  }
+}
