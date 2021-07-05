@@ -3,18 +3,19 @@
  * @description 链表
  * @link https://github.com/trekhleb/javascript-algorithms/blob/master/src/data-structures/linked-list/README.zh-CN.md
  */
+import LinkedNode from './linked-node';
 
-interface LinkedNode<T = unknown> {
-    prev: LinkedNode<T> | null;
-    next: LinkedNode<T> | null;
-    data: T
-}
+// interface LinkedNode<T = unknown> {
+//     prev: LinkedNode<T> | null;
+//     next: LinkedNode<T> | null;
+//     value: T
+// }
 
-const createNode = <T>(v: T): LinkedNode<T> => ({
-    prev: null,
-    next: null,
-    data: v,
-});
+// const createNode = <T>(v: T): LinkedNode<T> => ({
+//     prev: null,
+//     next: null,
+//     value: v,
+// });
 
 export default class LinkedList<T = unknown> {
     head: LinkedNode<T> | null = null;
@@ -27,7 +28,7 @@ export default class LinkedList<T = unknown> {
         let lastNode: LinkedNode<T>;
 
         values.forEach((v, i) => {
-            const currentNode = createNode(v);
+            const currentNode = new LinkedNode(v);
 
             if (lastNode) {
                 lastNode.next = currentNode;
@@ -45,7 +46,7 @@ export default class LinkedList<T = unknown> {
     }
 
     add(value: T) {
-        const targetNode = createNode(value);
+        const targetNode = new LinkedNode(value);
 
         // list is empty
         if (this.head === null) {
@@ -62,7 +63,7 @@ export default class LinkedList<T = unknown> {
     }
 
     prepend(value: T) {
-        const targetNode = createNode(value);
+        const targetNode = new LinkedNode(value);
 
         if (this.head === null) {
             this.head = targetNode;
@@ -80,7 +81,7 @@ export default class LinkedList<T = unknown> {
 
         if (this.head === null) return false;
 
-        while (foundNode && foundNode.data !== value) {
+        while (foundNode && foundNode.value !== value) {
             foundNode = foundNode.next;
         }
 
@@ -92,7 +93,7 @@ export default class LinkedList<T = unknown> {
 
         if (this.head === null) return false;
 
-        while (foundNode && foundNode.data !== value) {
+        while (foundNode && foundNode.value !== value) {
             foundNode = foundNode.next;
         }
 
@@ -138,7 +139,7 @@ export default class LinkedList<T = unknown> {
         if (this.head === null) return;
 
         while (lastNode) {
-            callback(lastNode.data);
+            callback(lastNode.value);
             lastNode = lastNode.next;
         }
     }
@@ -149,8 +150,25 @@ export default class LinkedList<T = unknown> {
         if (this.tail === null) return;
 
         while (lastNode) {
-            callback(lastNode.data);
+            callback(lastNode.value);
             lastNode = lastNode.prev;
         }
+    }
+
+    toArray() {
+        const nodes = [];
+
+        let lastNode = this.head;
+
+        while (lastNode) {
+            nodes.push(lastNode);
+            lastNode = lastNode.next;
+        }
+
+        return nodes;
+    }
+
+    toString(callback?: (v: T) => string) {
+        return this.toArray().map(node => node.toString(callback)).toString();
     }
 }
