@@ -45,7 +45,7 @@ export default class LinkedList<T = unknown> {
         });
     }
 
-    add(value: T) {
+    append(value: T) {
         const targetNode = new LinkedNode(value);
 
         // list is empty
@@ -88,7 +88,7 @@ export default class LinkedList<T = unknown> {
         return !!foundNode;
     }
 
-    remove(value: T): boolean {
+    delete(value: T): boolean {
         let foundNode = this.head;
 
         if (this.head === null) return false;
