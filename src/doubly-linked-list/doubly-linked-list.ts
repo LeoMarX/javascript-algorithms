@@ -5,6 +5,8 @@
  */
 import DoublyLinkedNode from './doubly-linked-node';
 
+type Nullable<T> = T | null;
+
 export default class DoublyLinkedList<T = unknown> {
     head: DoublyLinkedNode<T> | null = null;
     tail: DoublyLinkedNode<T> | null = null;
@@ -50,61 +52,54 @@ export default class DoublyLinkedList<T = unknown> {
         return this;
     }
 
-    find(value: T): boolean {
+    find({ value } :{ value: T}): Nullable<DoublyLinkedNode<T>> {
         let foundNode = this.head;
 
-        if (this.head === null) return false;
+        if (this.head === null) return foundNode;
 
         while (foundNode && foundNode.value !== value) {
             foundNode = foundNode.next;
         }
 
-        return !!foundNode;
+        return foundNode;
     }
 
-    delete(value: T): boolean {
-        let foundNode = this.head;
+    delete(value: T): Nullable<DoublyLinkedNode<T>> {
+        let foundNode = null;
 
-        if (this.head === null) return false;
+        if (this.head === null) return null;
 
-        while (foundNode && foundNode.value !== value) {
-            foundNode = foundNode.next;
+        let currentNode: Nullable<DoublyLinkedNode<T>> = this.head;
+
+        while (currentNode) {
+            if (currentNode.value === value) {
+                foundNode = currentNode;
+                // single node
+                if (currentNode.previous === null && currentNode.next === null) {
+                    this.head = null;
+                    this.tail = null;
+                }
+                // head
+                else if (currentNode.previous === null && currentNode.next) {
+                    currentNode.next.previous = null;
+                    this.head = currentNode.next;
+                }
+                // tail
+                else if (currentNode.next === null && currentNode.previous) {
+                    currentNode.previous.next = null;
+                    this.tail = currentNode.previous;
+                }
+                // middle
+                else if (currentNode.previous && currentNode.next) {
+                    currentNode.previous.next = currentNode.next;
+                    currentNode.next.previous = currentNode.previous;
+                }
+            }
+
+            currentNode = currentNode.next;
         }
-
-        if (!foundNode) return false;
-
-        // single node
-        if (foundNode.previous === null && foundNode.next === null) {
-            this.head = null;
-            this.tail = null;
-            return true;
-        }
-
-        // head
-        if (foundNode.previous === null && foundNode.next) {
-            foundNode.next.previous = null;
-            this.head = foundNode.next;
-            return true;
-        }
-
-        // tail
-        if (foundNode.next === null && foundNode.previous) {
-            foundNode.previous.next = null;
-            foundNode.previous = null;
-            this.tail = foundNode.previous;
-            return true;
-        }
-
-        // middle
-        if (foundNode.previous && foundNode.next) {
-            foundNode.previous.next = foundNode.next;
-            foundNode.next.previous = foundNode.previous;
-            foundNode.previous = null;
-            foundNode.next = null;
-            return true;
-        }
-
-        return false;
+            
+        return foundNode;
     }
 
     traverse(callback: (value: T) => void): void {
