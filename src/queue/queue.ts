@@ -21,7 +21,7 @@ export class Queue<T> {
 
     dequeue(): T | null {
         const deleteNode = this.linkedList.deleteHead();
-        console.log('deleteNode: ', deleteNode);
+
         return deleteNode ? deleteNode.value : null;
     }
 
