@@ -8,7 +8,7 @@
 import { comparator } from '../utils/comparator';
 import { LinkedNode } from './linked-node';
 
-type NullableNode<T> = LinkedNode<T> | null;
+export type NullableNode<T> = LinkedNode<T> | null;
 
 export class LinkedList<T> {
     head: NullableNode<T> = null;
