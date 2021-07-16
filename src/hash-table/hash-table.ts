@@ -17,8 +17,14 @@ export class HashTable<T> {
     keys: Record<string, number>;
 
     constructor(bucketsNums = DEFAULT_BUCKETS_NUMS) {
+        /**
+         * 这里只比较 key 一致，理论上不存在重复 key
+         * 处理链表 delete 的查找问题：https://github.com/trekhleb/javascript-algorithms/issues/521
+         */
+        const isEqual = (a: NodeType<T>, b: NodeType<T>) => a.key === b.key ? 0 : -1;
+
         this.buckets = Array.from({length: bucketsNums})
-                        .map(() => new LinkedList<NodeType<T>>((a: NodeType<T>, b: NodeType<T>) => a.key === b.key ? 0 : -1));
+                        .map(() => new LinkedList<NodeType<T>>(isEqual));
         this.keys = Object.create(null);
     }
 
@@ -48,8 +54,9 @@ export class HashTable<T> {
     }
 
     set(key: string, value: T): void {
-        const index =  this.keys[key] ?? this.hash(key);
+        const index =  this.keys[key] ?? this.hash(key); // 优先从缓存访问
         const bucket = this.buckets[index];
+
         this.keys[key] = index;
 
         if (!bucket) return;
@@ -87,7 +94,7 @@ export class HashTable<T> {
         const values: T[] = [];
 
         this.buckets.forEach(bucket => {
-            values.push(...bucket.toArray().map(node => node.value.value));
+            bucket.toArray().forEach(node => values.push(node.value.value));
         });
 
         return values;
