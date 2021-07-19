@@ -54,7 +54,7 @@ export class HashTable<T> {
     }
 
     set(key: string, value: T): void {
-        const index =  this.keys[key] ?? this.hash(key); // 优先从缓存访问
+        const index = this.keys[key] ?? this.hash(key); // 优先从缓存访问
         const bucket = this.buckets[index];
 
         this.keys[key] = index;

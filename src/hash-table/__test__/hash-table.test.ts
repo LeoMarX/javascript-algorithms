@@ -1,3 +1,4 @@
+// fork by https://github.com/trekhleb/javascript-algorithms/blob/master/src/data-structures/hash-table/__test__/HashTable.test.js
 import { HashTable } from '../hash-table';
 
 describe('HashTable', () => {
