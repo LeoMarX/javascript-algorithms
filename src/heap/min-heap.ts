@@ -82,7 +82,6 @@ export class MinHeap<T = number> {
         this.heap.push(value);
 
         this.heapifyUp();
-        console.log(`add value [${value}] result: `, this.toString());
 
         return this;
     }
