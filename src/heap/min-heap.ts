@@ -89,22 +89,29 @@ export class MinHeap<T = number> {
 
     remove(value: T, comparator?: (v1: T, v2: T) => 0 | -1 | 1): this {
         const heap = this.heap;
-        const compareFn = comparator ?? ((v1: unknown, v2: unknown) => (v1 as number) - (v2 as number));
+        // const compareFn = comparator ?? ((v1: unknown, v2: unknown) => (v1 as number) - (v2 as number));
 
-        let current = heap.length -1;
-        let parent = this.getParentIndex(current);
+        const foundList = this.find(value, comparator);
 
-        while (parent && heap[current] && heap[parent] && compareFn(value, heap[current]) >= 0) {
-            current = parent;
-            parent = this.getParentIndex(current);
-        }
+        foundList.forEach(() => {
+            const [ itemIndex ] = this.find(value, comparator);
+            const parentIndex = this.getParentIndex(itemIndex);
+            const [ leftChildIndex ] = this.getChildIndex(itemIndex);
+            // heap.splice(itemIndex, 1);
 
-        for (let i = current; i >= Number(parent); i --) {
-            if (compareFn(value, heap[i]) === 0) {
-                heap.splice(i, 1);
-                return this;
+            if (itemIndex === heap.length - 1) {
+                heap.pop();
+                return;
             }
-        }
+
+            heap[itemIndex] = (heap.pop() as T);
+
+            if (leftChildIndex && !parentIndex) {
+                this.heapifyDown(itemIndex);
+            } else {
+                this.heapifyUp(itemIndex);
+            }
+        });
 
         return this;
     }
