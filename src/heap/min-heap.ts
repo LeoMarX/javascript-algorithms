@@ -10,6 +10,7 @@
  */
 
 import { comparator } from '../utils/comparator'
+
 export class MinHeap<T = number> {
     private heap: T[];
 
@@ -80,7 +81,6 @@ export class MinHeap<T = number> {
 
     add(value: T): this {
         this.heap.push(value);
-
         this.heapifyUp();
 
         return this;
@@ -88,7 +88,6 @@ export class MinHeap<T = number> {
 
     remove(value: T, comparator?: (v1: T, v2: T) => 0 | -1 | 1): this {
         const heap = this.heap;
-        // const compareFn = comparator ?? ((v1: unknown, v2: unknown) => (v1 as number) - (v2 as number));
 
         const foundList = this.find(value, comparator);
 
@@ -123,7 +122,6 @@ export class MinHeap<T = number> {
 
         for (let i = 0, length = heap.length; i < length; i ++) {
             if (compareFn(value, heap[i]) === 0) {
-                // heap.slice(i, 1);
                 foundIndex.push(i);
             }
         }
@@ -132,7 +130,7 @@ export class MinHeap<T = number> {
     }
 
     poll(): T | null {
-        const result = this.heap.splice(0, 1)[0];
+        const result = this.heap.shift();
 
         // Move the last element from the end to the head. I don't know why.
         this.heap.unshift(this.heap.pop() as T);

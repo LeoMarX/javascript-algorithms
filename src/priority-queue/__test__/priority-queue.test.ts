@@ -1,3 +1,4 @@
+// fork by https://github.com/trekhleb/javascript-algorithms/blob/master/src/data-structures/priority-queue/__test__/PriorityQueue.test.js
 import { PriorityQueue } from '../priority-queue';
 
 describe('PriorityQueue', () => {
