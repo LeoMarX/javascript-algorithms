@@ -2,4 +2,4 @@
 . "$(dirname "$0")/_/husky.sh"
 
 yarn run lint
-# npm run testnpm test
+npx pretty-quick --staged
