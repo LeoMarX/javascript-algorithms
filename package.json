@@ -7,7 +7,7 @@
     "test": "jest",
     "lint": "eslint ./src/**",
     "prepare": "husky install",
-    "coverage": "npm run test -- --coverage",
+    "coverage": "yarn run test -- --coverage",
     "build": "tsc src/**/*.ts --outDir _dist_"
   },
   "author": "leo",
