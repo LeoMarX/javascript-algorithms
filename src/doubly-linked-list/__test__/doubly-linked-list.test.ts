@@ -1,4 +1,4 @@
-import DoublyLinkedList from '../doubly-linked-list';
+import { DoublyLinkedList } from '../doubly-linked-list';
 
 describe('DoublyLinkedList', () => {
   it('should create empty linked list', () => {
@@ -158,13 +158,11 @@ describe('DoublyLinkedList', () => {
   it('should be possible to store objects in the list and to print them out', () => {
     const linkedList = new DoublyLinkedList<NodeValue>();
 
-    type NodeValue = { value: number, key: string };
+    type NodeValue = { value: number; key: string };
     const nodeValue1: NodeValue = { value: 1, key: 'key1' };
     const nodeValue2: NodeValue = { value: 2, key: 'key2' };
 
-    linkedList
-      .append(nodeValue1)
-      .prepend(nodeValue2);
+    linkedList.append(nodeValue1).prepend(nodeValue2);
 
     const nodeStringifier = (value: NodeValue) => `${value.key}:${value.value}`;
 
@@ -179,9 +177,7 @@ describe('DoublyLinkedList', () => {
     linkedList.append(1);
     expect(linkedList.find({ value: 1 })).toBeDefined();
 
-    linkedList
-      .append(2)
-      .append(3);
+    linkedList.append(2).append(3);
 
     const node = linkedList.find({ value: 2 });
 
@@ -190,7 +186,7 @@ describe('DoublyLinkedList', () => {
   });
 
   it('should find node by callback', () => {
-    type NodeValue = { value: number, key: string };
+    type NodeValue = { value: number; key: string };
 
     const linkedList = new DoublyLinkedList<NodeValue>();
 
@@ -199,16 +195,22 @@ describe('DoublyLinkedList', () => {
       .append({ value: 2, key: 'test2' })
       .append({ value: 3, key: 'test3' });
 
-    const node = linkedList.find({ callback: (value: NodeValue) => value.key === 'test2' });
+    const node = linkedList.find({
+      callback: (value: NodeValue) => value.key === 'test2',
+    });
 
     expect(node).toBeDefined();
     expect(node?.value.value).toBe(2);
     expect(node?.value.key).toBe('test2');
-    expect(linkedList.find({ callback: (value) => value.key === 'test5' })).toBeNull();
+    expect(
+      linkedList.find({
+        callback: (value: NodeValue) => value.key === 'test5',
+      }),
+    ).toBeNull();
   });
 
   it('should find node by means of custom compare function', () => {
-    type NodeValue = { value: number, customValue: string };
+    type NodeValue = { value: number; customValue: string };
 
     const comparatorFunction = (a: NodeValue, b: NodeValue) => {
       if (a.customValue === b.customValue) {
@@ -232,18 +234,16 @@ describe('DoublyLinkedList', () => {
     expect(node).toBeDefined();
     expect(node?.value.value).toBe(2);
     expect(node?.value.customValue).toBe('test2');
-    expect(linkedList.find({ value: { value: 2, customValue: 'test5' } })).toBeNull();
+    expect(
+      linkedList.find({ value: { value: 2, customValue: 'test5' } }),
+    ).toBeNull();
   });
 
   it('should reverse linked list', () => {
     const linkedList = new DoublyLinkedList<number>();
 
     // Add test values to linked list.
-    linkedList
-      .append(1)
-      .append(2)
-      .append(3)
-      .append(4);
+    linkedList.append(1).append(2).append(3).append(4);
 
     expect(linkedList.toString()).toBe('1,2,3,4');
     expect(linkedList.head?.value).toBe(1);
