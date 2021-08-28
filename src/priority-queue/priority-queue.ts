@@ -4,70 +4,54 @@
  * @link https://github.com/trekhleb/javascript-algorithms/blob/master/src/data-structures/priority-queue/README.md
  * @export
  * @class PriorityQueue
-*/
+ */
 
 import { MinHeap } from '../heap/min-heap';
+import { HashTable } from '../hash-table/hash-table';
 
-type InnerStore<T> = Partial<{ [k: number]: T[] }>;
+const toStringKey = (value: unknown): string =>
+  typeof value === 'object' ? JSON.stringify(value) : `${value}`;
+export class PriorityQueue<T = number> extends MinHeap<T> {
+  store: HashTable<number>;
 
-export class PriorityQueue<T = number> {
-    heap: MinHeap<number>;
-    
-    store: InnerStore<T>;
+  constructor() {
+    super();
+    this.store = new HashTable();
+  }
 
-    constructor() {
-        this.heap = new MinHeap();
-        this.store = {} as InnerStore<T>;
-    }
+  compare = (v1: T, v2: T): boolean => {
+    const p1 = this.store.get(toStringKey(v1));
+    const p2 = this.store.get(toStringKey(v2));
 
-    add(value: T, priority: number): this {
-        this.heap.add(priority);
-        this.store[priority] = (this.store[priority] ?? []).concat(value);
-        return this;
-    }
+    if (p1 <= p2) return true;
 
-    poll(): T | null {
-        const key = this.heap.peek();
+    return false;
+  };
 
-        if (!(typeof key === 'number' && Array.isArray(this.store[key]))) return null;
+  add(value: T, priority: number): this {
+    this.store.set(toStringKey(value), priority);
+    super.add(value);
+    return this;
+  }
 
-        const values = this.store[key] as T[];
+  hasValue(value: T): boolean {
+    return this.store.has(toStringKey(value));
+  }
 
-        if (values.length <= 1) {
-            delete this.store[key];
-        }
+  remove(value: T): this {
+    super.remove(value);
+    this.store.delete(toStringKey(value));
 
-        this.heap.poll();
+    return this;
+  }
 
-        return values.shift() as T;
-    }
+  changePriority(value: T, priority: number): this {
+    this.remove(value);
 
-    peek(): T | null {
-        const key = this.heap.peek();
+    this.store.set(toStringKey(value), priority);
 
-        if(typeof key !== 'number') return null;
+    this.add(value, priority);
 
-        return this.store[key]?.[0] ?? null;
-    }
-
-    hasValue(value: T): boolean {
-        return true;
-    }
-
-    changePriority(value: T, priority: number): this {
-        this.heap.remove(priority);
-        const values = this.store[priority];
-
-        if (values && values?.length > 1) {
-            const index = values.indexOf(value);
-
-            values.splice(index, 1);
-        } else {
-            delete this.store[priority];
-        }
-
-        this.add(value, priority);
-
-        return this;
-    }
+    return this;
+  }
 }
