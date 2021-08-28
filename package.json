@@ -7,7 +7,6 @@
     "test": "jest",
     "lint": "eslint ./src/**",
     "prepare": "husky install",
-    "postinstall": "node ./node_modules/.bin/husky install",
     "coverage": "yarn run test -- --coverage",
     "build": "tsc src/**/*.ts --outDir _dist_"
   },
